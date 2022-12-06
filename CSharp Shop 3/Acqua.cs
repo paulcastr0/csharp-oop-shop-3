@@ -12,69 +12,43 @@ namespace CSharp_Shop_3
 {
     public class Acqua : Prodotto
     {
-        //PROPRIETA o ATTRIBUTI
         private double litri;
         private double ph;
         private string sorgente;
-        private double litriDaBere;
-        private double bottiglia;
-        private double litriMessi;
 
-        //COSTRUTTORE
-        public Acqua(string name, string description, double prezzo, double IVA, double litri, double ph, string sorgente, double litriMessi) : base(name, description, prezzo, IVA)
+        public Acqua(string nome, string descrizione, double litri, double ph,
+            string sorgente, double prezzo, double iva) : base(nome, descrizione, prezzo, iva)
         {
             this.litri = litri;
             this.ph = ph;
             this.sorgente = sorgente;
-            this.litriDaBere = litriDaBere;
-            this.bottiglia = bottiglia;
-            this.litriMessi = litriMessi;
         }
 
-        //GETTERs
+        //--------------------------------- Metodi Get ---------------------------------
+
         public double GetLitri()
-        {
-            return litri;
-        }
-        public double GetPh()
-        {
-            return ph;
-        }
-        public string GetSorgente()
-        {
-            return sorgente;
-        }
-        public double GetLitriDaBere()
-        {
-            return litriDaBere;
-        }
-        public double GetBottiglia()
-        {
-            return bottiglia;
-        }
-
-        //SETTERs
-        public double SetLitri()
         {
             return this.litri;
         }
-        public double SetLitriDaBere()
+        public double GetpH()
         {
-            return this.litriDaBere;
+            return this.ph;
         }
-        public double SetBottigliaPiena()
+        public string GetSorgente()
         {
-            return this.bottiglia = 1.5;
+            return this.sorgente;
         }
-        public double SetLitriMessi()
+        //--------------------------------- Metodi set ---------------------------------
+
+        public void SetLitri(double litri)
         {
-            return this.litriMessi;
+            this.litri = litri;
         }
-        public void SetPh()
+        public void SetpH(double pH)
         {
-            if(ph < 0 || ph > 14)
+            if (this.ph < 0 || this.ph > 14)
             {
-                throw new PhLimit("Il pH dell'acqua non può essere minore di 0 o maggiore di 14");
+                throw new PhLimit("Il pH di un liquido non può essere maggiore di 14 o minore di 0;");
             }
             else { this.ph = ph; }
         }
@@ -82,36 +56,45 @@ namespace CSharp_Shop_3
         {
             if (!string.IsNullOrEmpty(sorgente))
             {
-                throw new EmptyBottle("Non c'è acqua");
+                throw new();
             }
+            this.sorgente = sorgente;
         }
-        //METODI PUBBLICI
-        public void Bevi()
+
+        //--------------------------------- Metodi Acqua ---------------------------------
+
+        public void svuotaBottiglia()
         {
-            if (litriDaBere <= litri)
-            {
-                litri = litri - litriDaBere;
-            }
+            this.litri = 0;
         }
-        public void Svuota()
+
+        public void riempiBottiglia()
         {
-            if (litriDaBere >= litri)
-            {
-                litri = 0;
-            }
+            this.litri = 1.5;
         }
-        public void Riempi()
+
+        public void beviAcqua()
         {
-            if (litriMessi < bottiglia)
+            this.litri = this.litri - 0.3;
+        }
+
+        public void refillBottigliaUtente(double acquaInserita)
+        {
+            if (acquaInserita < 0)
             {
-                bottiglia = litriMessi;
+                Console.WriteLine("Non puoi piu rimuovere un valore negativo di acqua, tonto!");
             }
-            else if (litriMessi > bottiglia)
+            else if (acquaInserita > 0 && acquaInserita <= 1.5 && this.litri + acquaInserita < 1.5)
             {
-                Console.WriteLine("Hai messo troppa acqua!");
+                this.litri += acquaInserita;
+            }
+            else
+            {
+                Console.WriteLine("Hai inserito troppa acqua!");
             }
         }
 
+        // Override Metodo stampa
         public override void StampaProdotto()
         {
             Console.WriteLine("------ " + base.GetName() + " -----");
@@ -119,7 +102,6 @@ namespace CSharp_Shop_3
             Console.WriteLine("Descrizione:" + base.GetDescription());
             Console.WriteLine("Capienza:" + this.litri + "l");
             Console.WriteLine("pH: " + this.ph);
-            Console.WriteLine("Quanti Litri ci sono:" + this.litriMessi + "l");
             Console.WriteLine("Codice prodotto:" + base.GetCodice());
             Console.WriteLine("L'IVA è: " + base.GetIVA() + "%");
             Console.WriteLine("Il prezzo è: " + base.GetPrezzo() + "euro");

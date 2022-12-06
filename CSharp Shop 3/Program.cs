@@ -6,7 +6,7 @@ Caramella goleador = new Caramella("Goleador", "Una buona caramella", 0.10, 22, 
 Caramella bubblegum = new Caramella("BubbleGum", "Gomma Americana", 0.15, 22, "amarena", 45);
 
 
-Acqua BottigliaAcqua = new Acqua("Bottiglia D'acqua", "bottiglia da 1.5l", 1, 22, 1.5, -5, "Trentino alto adige", 0.8);
+Acqua BottigliaAcqua = new Acqua("Bottiglia D'acqua", "bottiglia da 1.5l", 1, 22, "Trentino alto adige", -5,22);
 BottigliaAcqua.StampaProdotto();
 
 
