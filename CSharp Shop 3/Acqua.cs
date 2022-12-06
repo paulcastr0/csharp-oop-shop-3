@@ -12,102 +12,146 @@ namespace CSharp_Shop_3
 {
     public class Acqua : Prodotto
     {
-        private double litri;
-        private double ph;
-        private string sorgente;
+        // CARATTERISTICHE
 
-        public Acqua(string nome, string descrizione, double litri, double ph,
-            string sorgente, double prezzo, double iva) : base(nome, descrizione, prezzo, iva)
+        private double litri;
+        private double pH;
+        private string sorgente;
+        private double maxCapienza;
+
+        // COSTRUTTORE
+
+        public Acqua(string nome, string descrizione, float prezzo, int iva, double litri, double pH, string sorgente) : base(nome, descrizione, prezzo, iva)
         {
+            if (litri < 0)
+            {
+                throw new ResultCannotBeNegative("Non puoi inserire un valore di liri negativo.");
+            }
             this.litri = litri;
-            this.ph = ph;
+            if (pH < 0)
+            {
+                throw new ResultCannotBeNegative("Non puoi inserire un pH negativo.");
+            }
+            if (pH > 14)
+            {
+                throw new OverFlow("Il pH non può superare il valore 14");
+            }
+            this.pH = Math.Round(pH, 2);
             this.sorgente = sorgente;
+            this.maxCapienza = 1.5;
         }
 
-        //--------------------------------- Metodi Get ---------------------------------
+        // GETTERS
 
         public double GetLitri()
         {
             return this.litri;
         }
-        public double GetpH()
+        public double GetPH()
         {
-            return this.ph;
+            return this.pH;
         }
         public string GetSorgente()
         {
             return this.sorgente;
         }
-        //--------------------------------- Metodi set ---------------------------------
+        public double GetMaxCapienza()
+        {
+            return this.maxCapienza;
+        }
 
+        // SETTERS
         public void SetLitri(double litri)
         {
+            if (litri < 0)
+            {
+                throw new ResultCannotBeNegative("Non puoi inserire un valore di liri negativo.");
+            }
             this.litri = litri;
         }
-        public void SetpH(double pH)
+        public void SetPH(double ph)
         {
-            if (this.ph < 0 || this.ph > 14)
+            if (ph < 0)
             {
-                throw new PhLimit("Il pH di un liquido non può essere maggiore di 14 o minore di 0;");
+                throw new PhLimit("Il pH non può essere negativo.");
             }
-            else { this.ph = ph; }
+            if (ph > 14)
+            {
+                throw new OverFlow("Il pH non può superare il valore 14");
+            }
+            this.pH = pH;
         }
         public void SetSorgente(string sorgente)
         {
-            if (!string.IsNullOrEmpty(sorgente))
-            {
-                throw new();
-            }
             this.sorgente = sorgente;
         }
 
-        //--------------------------------- Metodi Acqua ---------------------------------
+        // METODO
 
-        public void svuotaBottiglia()
+        public double BeviAcqua(double litriDaBere)
+        {
+            if (litriDaBere <= this.litri)
+            {
+                this.litri = this.litri - litriDaBere;
+                if (this.litri == 0)
+                {
+                    Console.WriteLine("Hai finito l'acqua.");
+                }
+
+            }
+            else
+            {
+                throw new EmptyBottle("Non puoi bere perchè non c'è più acqua");
+            }
+
+            return this.litri;
+        }
+
+        public void RiempiBottiglia(float litriDaRiempire)
+        {
+            if (litriDaRiempire < 0)
+            {
+                throw new ResultCannotBeNegative("Non puoi riempire negativamente la bottiglia.");
+            }
+
+            if (this.maxCapienza - this.litri >= litriDaRiempire) // litriDaRiempiere <= this.maxCapienza - this.litri 
+            {
+                this.litri += Math.Round(litriDaRiempire, 2);
+            }
+            else
+            {
+                throw new OverFlow("Hai superato la capienza massima della bottiglia");
+            }
+
+        }
+
+        public void SvuotaBottiglia()
         {
             this.litri = 0;
         }
 
-        public void riempiBottiglia()
-        {
-            this.litri = 1.5;
-        }
-
-        public void beviAcqua()
-        {
-            this.litri = this.litri - 0.3;
-        }
-
-        public void refillBottigliaUtente(double acquaInserita)
-        {
-            if (acquaInserita < 0)
-            {
-                Console.WriteLine("Non puoi piu rimuovere un valore negativo di acqua, tonto!");
-            }
-            else if (acquaInserita > 0 && acquaInserita <= 1.5 && this.litri + acquaInserita < 1.5)
-            {
-                this.litri += acquaInserita;
-            }
-            else
-            {
-                Console.WriteLine("Hai inserito troppa acqua!");
-            }
-        }
-
-        // Override Metodo stampa
         public override void StampaProdotto()
         {
-            Console.WriteLine("------ " + base.GetName() + " -----");
+            base.StampaProdotto();
             Console.WriteLine();
-            Console.WriteLine("Descrizione:" + base.GetDescription());
-            Console.WriteLine("Capienza:" + this.litri + "l");
-            Console.WriteLine("pH: " + this.ph);
-            Console.WriteLine("Codice prodotto:" + base.GetCodice());
-            Console.WriteLine("L'IVA è: " + base.GetIVA() + "%");
-            Console.WriteLine("Il prezzo è: " + base.GetPrezzo() + "euro");
-            Console.WriteLine("Il codice NomeEsteso è: " + this.GetNomeEsteso());
+            Console.WriteLine("Dati acqua:");
             Console.WriteLine();
+            Console.WriteLine("Litri: " + GetLitri());
+            Console.WriteLine("pH: " + GetPH());
+            Console.WriteLine("Sorgente: " + GetSorgente());
+            Console.WriteLine();
+
         }
+
+
+        // METODO STATICO
+        public static double LitriInGalloni(double litri)
+        {
+            const double GalloniXLitro = 3.785;
+            double galloni = (litri * GalloniXLitro);
+            return galloni;
+        }
+
 
     }
 }

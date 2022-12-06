@@ -1,13 +1,17 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using CSharp_Shop_3;
+using System;
+using CSharp_Shop_3.CustomException;
 
 Caramella goleador = new Caramella("Goleador", "Una buona caramella", 0.10, 22, "frutta", 30);
 Caramella bubblegum = new Caramella("BubbleGum", "Gomma Americana", 0.15, 22, "amarena", 45);
 
 
-Acqua BottigliaAcqua = new Acqua("Bottiglia D'acqua", "bottiglia da 1.5l", 1, 22, "Trentino alto adige", -5,22);
+Acqua BottigliaAcqua = new Acqua("Bottiglia D'acqua", "bottiglia da 1.5l", 1, 22, 1.5, 5,"Trentino");
 BottigliaAcqua.StampaProdotto();
+
+Console.WriteLine("Contenuto in galloni: " + Acqua.LitriInGalloni(1.5));
 
 
 Videogioco Pokemon = new Videogioco("Pokémon Scarlatto", "L'ultimo gioco dei Pokemon", 60.00, 22, "GameFreak");
